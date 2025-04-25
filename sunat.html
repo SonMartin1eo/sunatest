@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Градиентная страница с меню</title>
+    <title>Градиентная страница с контактами</title>
     <style>
         body {
             height: 100vh;
@@ -12,21 +12,23 @@
             background: linear-gradient(135deg, #6a11cb, #2575fc);
             color: white;
             text-align: center;
+            overflow: hidden;
         }
         nav {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
             position: absolute;
             width: 100%;
             top: 0;
             display: flex;
             justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
         nav a {
             color: white;
             text-decoration: none;
             padding: 15px 20px;
-            margin: 0 10px;
+            margin: 0 15px;
             border-radius: 5px;
             transition: background-color 0.3s, transform 0.3s;
         }
@@ -36,7 +38,7 @@
         }
         h1 {
             font-size: 3em;
-            margin-top: 60px; /* Отступ для меню */
+            margin-top: 70px; /* Отступ для меню */
         }
         p {
             font-size: 1.5em;
@@ -56,18 +58,178 @@
             background-color: #e91e63;
             transform: scale(1.05);
         }
+        .widget {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+            width: 250px;
+            display: inline-block;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .widget:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+        .widgets-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            color: black;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        /* Стиль для страницы контактов */
+        .contact-page {
+            display: none;
+            margin-top: 100px;
+        }
+        .contact-link {
+            color: white;
+            font-size: 1.5em;
+            text-decoration: none;
+            display: block;
+            margin: 10px 0;
+            transition: color 0.3s;
+        }
+        .contact-link:hover {
+            color: #ff4081;
+        }
     </style>
 </head>
 <body>
     <nav>
-        <a href="#home">Главная</a>
-        <a href="#about">О нас</a>
-        <a href="#contact">Контакты</a>
+        <a href="#home" id="homeLink">Главная</a>
+        <a href="#about" id="aboutLink">О нас</a>
+        <a href="#contact" id="contactLink">Контакты</a>
     </nav>
-    <div>
-        <h1>Добро пожаловать!</h1>
-        <p>Это пример страницы с градиентным фоном, кнопкой и меню.</p>
-        <button class="button">Нажми на меня!</button>
+    <div id="homeContent">
+        <h1 class="fade-in">Добро пожаловать!</h1>
+        <p class="fade-in">Это пример страницы с градиентным фоном, кнопкой и виджетами.</p>
+        <button class="button fade-in" id="openModal">Нажми на меня!</button>
     </div>
+    <div class="widgets-container">
+        <div class="widget fade-in">
+            <h2>Виджет 1</h2>
+            <p>Описание виджета 1.</p>
+        </div>
+        <div class="widget fade-in">
+            <h2>Виджет 2</h2>
+            <p>Описание виджета 2.</p>
+        </div>
+        <div class="widget fade-in">
+            <h2>Виджет 3</h2>
+            <p>Описание виджета 3.</p>
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Модальное окно</h2>
+            <p>Это содержимое модального окна. Здесь можно разместить любую информацию.</p>
+        </div>
+    </div>
+
+    <!-- Страница контактов -->
+    <div id="contactContent" class="contact-page">
+        <h1>Контакты</h1>
+        <a href="https://wa.me/your_number" class="contact-link" target="_blank">WhatsApp</a>
+        <a href="https://instagram.com/your_username" class="contact-link" target="_blank">Instagram</a>
+        <a href="https://t.me/your_username" class="contact-link" target="_blank">Telegram</a>
+        <button class="button" id="backToHome">Назад</button>
+    </div>
+
+    <script>
+        // Получаем модальное окно
+        var modal = document.getElementById("myModal");
+
+        // Получаем кнопку, которая открывает модальное окно
+        var btn = document.getElementById("openModal");
+
+        // Получаем элемент <span>, который закрывает модальное окно
+        var span = document.getElementById("closeModal");
+
+        // Получаем элементы для навигации
+        var homeContent = document.getElementById("homeContent");
+        var contactContent = document.getElementById("contactContent");
+        var contactLink = document.getElementById("contactLink");
+        var backToHome = document.getElementById("backToHome");
+
+        // Когда пользователь нажимает на кнопку, открываем модальное окно
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // Когда пользователь нажимает на <span> (x), закрываем модальное окно
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // Когда пользователь нажимает в любом месте вне модального окна, закрываем его
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Показать страницу контактов
+        contactLink.onclick = function(event) {
+            event.preventDefault();
+            homeContent.style.display = "none";
+            contactContent.style.display = "block";
+        }
+
+        // Вернуться на главную страницу
+        backToHome.onclick = function() {
+            contactContent.style.display = "none";
+            homeContent.style.display = "block";
+        }
+    </script>
 </body>
 </html>
